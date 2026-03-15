@@ -14,6 +14,12 @@
   --warning-light: #fef3c7;
   --danger: #dc2626;
   --danger-light: #fee2e2;
+  --purple: #7c3aed;
+  --purple-light: #ede9fe;
+  --teal: #0d9488;
+  --teal-light: #ccfbf1;
+  --orange: #ea580c;
+  --orange-light: #fff7ed;
   --gray-50: #f9fafb;
   --gray-100: #f3f4f6;
   --gray-200: #e5e7eb;
@@ -22,9 +28,7 @@
   --gray-700: #374151;
   --gray-900: #111827;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
   background: var(--gray-50);
@@ -32,374 +36,239 @@ body {
   line-height: 1.6;
   padding-bottom: 80px;
 }
-
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 16px;
-}
+.container { max-width: 800px; margin: 0 auto; padding: 16px; }
 
 /* Header */
 .header {
   background: linear-gradient(135deg, #1e3a8a, #1a56db);
-  color: white;
-  padding: 24px 16px;
-  text-align: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  color: white; padding: 24px 16px; text-align: center;
+  position: sticky; top: 0; z-index: 100;
 }
 .header h1 { font-size: 1.3rem; margin-bottom: 4px; }
 .header .subtitle { font-size: 0.85rem; opacity: 0.85; }
 .countdown {
-  margin-top: 12px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 12px;
-  padding: 10px 16px;
-  display: inline-block;
+  margin-top: 12px; background: rgba(255,255,255,0.15);
+  border-radius: 12px; padding: 10px 16px; display: inline-block;
 }
 .countdown .days { font-size: 2rem; font-weight: 800; }
 .countdown .label { font-size: 0.75rem; }
 
-/* Navigation tabs */
+/* Tabs */
 .tabs {
-  display: flex;
-  background: white;
-  border-bottom: 2px solid var(--gray-200);
-  position: sticky;
-  top: 85px;
-  z-index: 99;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  display: flex; background: white; border-bottom: 2px solid var(--gray-200);
+  position: sticky; top: 85px; z-index: 99;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
 .tab {
-  flex: 1;
-  min-width: 80px;
-  padding: 12px 8px;
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--gray-500);
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
-  white-space: nowrap;
+  flex: 1; min-width: 60px; padding: 12px 6px; text-align: center;
+  font-size: 0.75rem; font-weight: 600; color: var(--gray-500);
+  cursor: pointer; border-bottom: 3px solid transparent;
+  transition: all 0.2s; white-space: nowrap;
 }
-.tab.active {
-  color: var(--primary);
-  border-bottom-color: var(--primary);
-}
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); }
 
 /* Sections */
 .section { display: none; }
 .section.active { display: block; }
 
-/* Progress bar */
+/* Sub-tabs for record section */
+.sub-tabs {
+  display: flex; gap: 6px; margin-bottom: 16px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+.sub-tab {
+  padding: 8px 14px; border-radius: 20px; font-size: 0.75rem;
+  font-weight: 600; cursor: pointer; white-space: nowrap;
+  border: 1.5px solid var(--gray-300); background: white; color: var(--gray-700);
+  transition: all 0.2s; font-family: inherit;
+}
+.sub-tab.active { border-color: var(--primary); background: var(--primary); color: white; }
+.sub-tab[data-color="blue"].active { background: var(--primary); border-color: var(--primary); }
+.sub-tab[data-color="purple"].active { background: var(--purple); border-color: var(--purple); }
+.sub-tab[data-color="teal"].active { background: var(--teal); border-color: var(--teal); }
+.sub-tab[data-color="orange"].active { background: var(--orange); border-color: var(--orange); }
+.sub-section { display: none; }
+.sub-section.active { display: block; }
+
+/* Progress */
 .progress-overview {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin: 16px 0;
+  background: white; border-radius: 12px; padding: 16px; margin: 16px 0;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .progress-bar-container {
-  background: var(--gray-200);
-  border-radius: 8px;
-  height: 12px;
-  overflow: hidden;
-  margin: 8px 0;
+  background: var(--gray-200); border-radius: 8px; height: 12px;
+  overflow: hidden; margin: 8px 0;
 }
 .progress-bar-fill {
-  height: 100%;
-  border-radius: 8px;
+  height: 100%; border-radius: 8px;
   background: linear-gradient(90deg, var(--primary), var(--success));
   transition: width 0.5s ease;
 }
-.progress-stats {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: var(--gray-500);
-}
+.progress-stats { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--gray-500); }
 
 /* Cards */
 .card {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
+  background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
-.card h3 {
-  font-size: 1rem;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.card .badge {
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-weight: 600;
-}
-.badge-done { background: var(--success-light); color: var(--success); }
-.badge-now { background: var(--warning-light); color: var(--warning); }
-.badge-future { background: var(--gray-100); color: var(--gray-500); }
-.badge-phase { background: var(--primary-light); color: var(--primary); }
+.card h3 { font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
 
-/* Schedule pattern */
+/* Schedule */
 .schedule-pattern {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
+  background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .pattern-title {
-  font-weight: 700;
-  font-size: 0.95rem;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--gray-200);
+  font-weight: 700; font-size: 0.95rem; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 2px solid var(--gray-200);
 }
 .time-block {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 8px 0;
+  display: flex; align-items: flex-start; gap: 12px; padding: 8px 0;
   border-bottom: 1px solid var(--gray-100);
 }
 .time-block:last-child { border-bottom: none; }
-.time-label {
-  min-width: 52px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--primary);
-  padding-top: 2px;
-}
+.time-label { min-width: 52px; font-size: 0.75rem; font-weight: 700; color: var(--primary); padding-top: 2px; }
 .time-content { flex: 1; font-size: 0.85rem; }
 .time-content .activity { font-weight: 600; }
 .time-content .detail { color: var(--gray-500); font-size: 0.8rem; }
 .time-hours {
-  font-size: 0.7rem;
-  background: var(--primary-light);
-  color: var(--primary);
-  padding: 2px 6px;
-  border-radius: 6px;
-  font-weight: 700;
-  white-space: nowrap;
+  font-size: 0.7rem; background: var(--primary-light); color: var(--primary);
+  padding: 2px 6px; border-radius: 6px; font-weight: 700; white-space: nowrap;
 }
 
 /* Checklist */
 .checklist-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 0;
+  display: flex; align-items: flex-start; gap: 10px; padding: 10px 0;
   border-bottom: 1px solid var(--gray-100);
 }
 .checklist-item:last-child { border-bottom: none; }
 .checklist-item input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  margin-top: 2px;
-  flex-shrink: 0;
-  accent-color: var(--primary);
+  width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; accent-color: var(--primary);
 }
-.checklist-item.checked .item-text {
-  text-decoration: line-through;
-  color: var(--gray-500);
-}
+.checklist-item.checked .item-text { text-decoration: line-through; color: var(--gray-500); }
 .item-text { font-size: 0.85rem; flex: 1; }
 .item-meta { font-size: 0.75rem; color: var(--gray-500); }
 
-/* Phase header */
+/* Phase */
 .phase-header {
   background: linear-gradient(135deg, var(--primary), #2563eb);
-  color: white;
-  padding: 14px 16px;
-  border-radius: 12px 12px 0 0;
-  margin-top: 16px;
+  color: white; padding: 14px 16px; border-radius: 12px 12px 0 0; margin-top: 16px;
 }
 .phase-header h2 { font-size: 1rem; }
 .phase-header .phase-dates { font-size: 0.8rem; opacity: 0.85; }
 .phase-body {
-  background: white;
-  padding: 12px 16px;
-  border-radius: 0 0 12px 12px;
+  background: white; padding: 12px 16px; border-radius: 0 0 12px 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
-/* Study log */
+/* Forms */
 .log-form {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
+  background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .log-form h3 { font-size: 1rem; margin-bottom: 12px; }
 .form-group { margin-bottom: 12px; }
 .form-group label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--gray-700);
+  display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; color: var(--gray-700);
 }
+.form-group .hint { font-size: 0.72rem; color: var(--gray-500); margin-bottom: 4px; }
 .form-group input, .form-group select, .form-group textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1.5px solid var(--gray-300);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-family: inherit;
-  transition: border-color 0.2s;
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--gray-300);
+  border-radius: 8px; font-size: 0.9rem; font-family: inherit; transition: border-color 0.2s;
 }
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary);
+  outline: none; border-color: var(--primary);
 }
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .btn {
-  display: inline-block;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
+  display: inline-block; padding: 10px 20px; border: none; border-radius: 8px;
+  font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit;
 }
 .btn-primary { background: var(--primary); color: white; }
 .btn-primary:hover { background: #1e40af; }
-.btn-danger { background: var(--danger); color: white; font-size: 0.8rem; padding: 6px 12px; }
-.btn-danger:hover { background: #b91c1c; }
-.btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+.btn-purple { background: var(--purple); color: white; }
+.btn-teal { background: var(--teal); color: white; }
+.btn-orange { background: var(--orange); color: white; }
 
 /* Log entries */
 .log-entry {
-  background: white;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  border-left: 4px solid var(--primary);
+  background: white; border-radius: 12px; padding: 14px 16px; margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08); border-left: 4px solid var(--primary);
 }
+.log-entry[data-type="daily"] { border-left-color: var(--purple); }
+.log-entry[data-type="weekly"] { border-left-color: var(--teal); }
+.log-entry[data-type="monthly"] { border-left-color: var(--orange); }
 .log-entry-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
 }
 .log-date { font-weight: 700; font-size: 0.85rem; }
 .log-hours {
-  font-size: 0.8rem;
-  background: var(--success-light);
-  color: var(--success);
-  padding: 2px 8px;
-  border-radius: 8px;
-  font-weight: 700;
+  font-size: 0.8rem; background: var(--success-light); color: var(--success);
+  padding: 2px 8px; border-radius: 8px; font-weight: 700;
+}
+.log-type-badge {
+  font-size: 0.65rem; padding: 2px 6px; border-radius: 8px; font-weight: 700;
 }
 .log-subject { font-size: 0.8rem; color: var(--primary); font-weight: 600; margin-bottom: 4px; }
-.log-memo { font-size: 0.8rem; color: var(--gray-500); }
+.log-memo { font-size: 0.8rem; color: var(--gray-500); white-space: pre-line; }
 .log-delete {
-  background: none; border: none; color: var(--gray-300); cursor: pointer; font-size: 1.1rem;
-  padding: 4px;
+  background: none; border: none; color: var(--gray-300); cursor: pointer;
+  font-size: 1.1rem; padding: 4px;
 }
 .log-delete:hover { color: var(--danger); }
-
-/* Stats summary */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 16px;
+.log-detail-row {
+  font-size: 0.8rem; padding: 4px 0; border-top: 1px solid var(--gray-100); margin-top: 6px;
 }
+.log-detail-label { font-weight: 600; color: var(--gray-700); }
+
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
 .stat-card {
-  background: white;
-  border-radius: 10px;
-  padding: 12px 8px;
-  text-align: center;
+  background: white; border-radius: 10px; padding: 12px 8px; text-align: center;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .stat-number { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
 .stat-label { font-size: 0.7rem; color: var(--gray-500); }
-
-/* Weekly hours chart */
 .weekly-chart {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
+  background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
-.chart-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-  height: 120px;
-  padding-top: 8px;
-}
+.chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 120px; padding-top: 8px; }
 .chart-bar-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  justify-content: flex-end;
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  height: 100%; justify-content: flex-end;
 }
 .chart-bar {
-  width: 100%;
-  max-width: 40px;
+  width: 100%; max-width: 40px;
   background: linear-gradient(180deg, var(--primary), #60a5fa);
-  border-radius: 4px 4px 0 0;
-  transition: height 0.3s;
-  min-height: 2px;
+  border-radius: 4px 4px 0 0; transition: height 0.3s; min-height: 2px;
 }
 .chart-bar-label { font-size: 0.65rem; color: var(--gray-500); margin-top: 4px; }
 .chart-bar-value { font-size: 0.65rem; font-weight: 700; color: var(--primary); margin-bottom: 2px; }
 
-/* Rules highlight */
+/* Rules */
 .rules-box {
-  background: var(--warning-light);
-  border-radius: 10px;
-  padding: 12px 14px;
-  margin: 12px 0;
-  font-size: 0.85rem;
-  border-left: 4px solid var(--warning);
+  background: var(--warning-light); border-radius: 10px; padding: 12px 14px;
+  margin: 12px 0; font-size: 0.85rem; border-left: 4px solid var(--warning);
 }
 .rules-box .rule { margin-bottom: 6px; }
 .rules-box .rule:last-child { margin-bottom: 0; }
 
-/* Filter buttons */
-.filter-row {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
+/* Filter */
+.filter-row { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 .filter-btn {
-  padding: 6px 12px;
-  border: 1.5px solid var(--gray-300);
-  border-radius: 20px;
-  background: white;
-  font-size: 0.75rem;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.2s;
+  padding: 6px 12px; border: 1.5px solid var(--gray-300); border-radius: 20px;
+  background: white; font-size: 0.75rem; cursor: pointer; font-family: inherit; transition: all 0.2s;
 }
-.filter-btn.active {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
+.filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* Scale input */
+.scale-input { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+.scale-input label { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+.scale-input input[type="radio"] { margin-bottom: 2px; accent-color: var(--primary); }
+.scale-input .scale-label { font-size: 0.65rem; color: var(--gray-500); }
+.scale-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--gray-500); margin-top: 2px; }
 
 @media (max-width: 480px) {
   .form-row { grid-template-columns: 1fr; }
@@ -407,6 +276,7 @@ body {
   .stat-number { font-size: 1.2rem; }
   .header h1 { font-size: 1.1rem; }
   .countdown .days { font-size: 1.6rem; }
+  .tab { font-size: 0.7rem; min-width: 50px; padding: 12px 4px; }
 }
 </style>
 </head>
@@ -425,7 +295,8 @@ body {
   <div class="tab active" data-tab="dashboard">ダッシュ</div>
   <div class="tab" data-tab="schedule">日課</div>
   <div class="tab" data-tab="plan">計画</div>
-  <div class="tab" data-tab="log">記録</div>
+  <div class="tab" data-tab="record">記録</div>
+  <div class="tab" data-tab="history">履歴</div>
   <div class="tab" data-tab="stats">統計</div>
 </div>
 
@@ -433,7 +304,6 @@ body {
 
 <!-- ==================== DASHBOARD ==================== -->
 <div class="section active" id="sec-dashboard">
-
   <div class="progress-overview">
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <strong style="font-size:0.9rem;">全体進捗</strong>
@@ -447,7 +317,6 @@ body {
       <span id="current-phase">--</span>
     </div>
   </div>
-
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-number" id="total-hours">0</div>
@@ -462,12 +331,10 @@ body {
       <div class="stat-label">連続日数</div>
     </div>
   </div>
-
   <div class="card">
     <h3>今やるべきこと</h3>
     <div id="current-tasks" style="font-size:0.85rem; color:var(--gray-700);"></div>
   </div>
-
   <div class="rules-box">
     <div style="font-weight:700; margin-bottom:6px;">学習ルール</div>
     <div class="rule">- 平日は最低3時間を死守</div>
@@ -480,129 +347,35 @@ body {
 
 <!-- ==================== SCHEDULE ==================== -->
 <div class="section" id="sec-schedule">
-
   <div class="schedule-pattern">
     <div class="pattern-title">平日パターンA：朝ランニングの日</div>
-    <div class="time-block">
-      <div class="time-label">早朝</div>
-      <div class="time-content">
-        <div class="activity">ランニング</div>
-      </div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">日中</div>
-      <div class="time-content">
-        <div class="activity">仕事</div>
-      </div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">夜</div>
-      <div class="time-content">
-        <div class="activity">勉強</div>
-        <div class="detail">テキスト・動画・問題集のメイン学習</div>
-        <div class="detail">※中途半端な時間 → 横断テキスト読み込み</div>
-      </div>
-      <div class="time-hours">3h</div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">就寝前</div>
-      <div class="time-content">
-        <div class="activity">ストレッチのみ</div>
-      </div>
-    </div>
-    <div style="text-align:right; margin-top:8px;">
-      <span class="time-hours" style="font-size:0.8rem;">合計 3h</span>
-    </div>
+    <div class="time-block"><div class="time-label">早朝</div><div class="time-content"><div class="activity">ランニング</div></div></div>
+    <div class="time-block"><div class="time-label">日中</div><div class="time-content"><div class="activity">仕事</div></div></div>
+    <div class="time-block"><div class="time-label">夜</div><div class="time-content"><div class="activity">勉強</div><div class="detail">テキスト・動画・問題集のメイン学習</div><div class="detail">※中途半端な時間 → 横断テキスト読み込み</div></div><div class="time-hours">3h</div></div>
+    <div class="time-block"><div class="time-label">就寝前</div><div class="time-content"><div class="activity">ストレッチのみ</div></div></div>
+    <div style="text-align:right; margin-top:8px;"><span class="time-hours" style="font-size:0.8rem;">合計 3h</span></div>
   </div>
-
   <div class="schedule-pattern">
     <div class="pattern-title">平日パターンB：朝勉強の日</div>
-    <div class="time-block">
-      <div class="time-label">早朝</div>
-      <div class="time-content">
-        <div class="activity">勉強</div>
-        <div class="detail">暗記系・横断整理・数字の確認</div>
-      </div>
-      <div class="time-hours">2h</div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">日中</div>
-      <div class="time-content">
-        <div class="activity">仕事</div>
-      </div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">夜</div>
-      <div class="time-content">
-        <div class="activity">勉強</div>
-        <div class="detail">テキスト・動画・問題集のメイン学習</div>
-      </div>
-      <div class="time-hours">2h</div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">就寝前</div>
-      <div class="time-content">
-        <div class="activity">トレーニング＋体幹</div>
-      </div>
-    </div>
-    <div style="text-align:right; margin-top:8px;">
-      <span class="time-hours" style="font-size:0.8rem;">合計 4h</span>
-    </div>
+    <div class="time-block"><div class="time-label">早朝</div><div class="time-content"><div class="activity">勉強</div><div class="detail">暗記系・横断整理・数字の確認</div></div><div class="time-hours">2h</div></div>
+    <div class="time-block"><div class="time-label">日中</div><div class="time-content"><div class="activity">仕事</div></div></div>
+    <div class="time-block"><div class="time-label">夜</div><div class="time-content"><div class="activity">勉強</div><div class="detail">テキスト・動画・問題集のメイン学習</div></div><div class="time-hours">2h</div></div>
+    <div class="time-block"><div class="time-label">就寝前</div><div class="time-content"><div class="activity">トレーニング＋体幹</div></div></div>
+    <div style="text-align:right; margin-top:8px;"><span class="time-hours" style="font-size:0.8rem;">合計 4h</span></div>
   </div>
-
   <div class="schedule-pattern">
     <div class="pattern-title">土日パターン</div>
-    <div class="time-block">
-      <div class="time-label">早朝</div>
-      <div class="time-content">
-        <div class="activity">ランニング</div>
-      </div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">午前</div>
-      <div class="time-content">
-        <div class="activity">勉強ブロック1</div>
-        <div class="detail">うち1時間は既習単元の振り返り（2024年問題集）</div>
-        <div class="detail">残り時間は新規科目のメイン学習</div>
-      </div>
-      <div class="time-hours">4h</div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">昼</div>
-      <div class="time-content">
-        <div class="activity">体幹トレーニング</div>
-      </div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">午後</div>
-      <div class="time-content">
-        <div class="activity">勉強ブロック2</div>
-        <div class="detail">メイン学習（テキスト・動画・問題集）</div>
-      </div>
-      <div class="time-hours">4h</div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">夕方</div>
-      <div class="time-content">
-        <div class="activity">リフレッシュ</div>
-      </div>
-    </div>
-    <div class="time-block">
-      <div class="time-label">就寝前</div>
-      <div class="time-content">
-        <div class="activity">勉強ブロック3</div>
-        <div class="detail">暗記・横断テキスト・軽めの復習</div>
-      </div>
-      <div class="time-hours">2h</div>
-    </div>
-    <div style="text-align:right; margin-top:8px;">
-      <span class="time-hours" style="font-size:0.8rem;">合計 10h（うち復習1h含む）</span>
-    </div>
+    <div class="time-block"><div class="time-label">早朝</div><div class="time-content"><div class="activity">ランニング</div></div></div>
+    <div class="time-block"><div class="time-label">午前</div><div class="time-content"><div class="activity">勉強ブロック1</div><div class="detail">うち1時間は既習単元の振り返り（2024年問題集）</div><div class="detail">残り時間は新規科目のメイン学習</div></div><div class="time-hours">4h</div></div>
+    <div class="time-block"><div class="time-label">昼</div><div class="time-content"><div class="activity">体幹トレーニング</div></div></div>
+    <div class="time-block"><div class="time-label">午後</div><div class="time-content"><div class="activity">勉強ブロック2</div><div class="detail">メイン学習（テキスト・動画・問題集）</div></div><div class="time-hours">4h</div></div>
+    <div class="time-block"><div class="time-label">夕方</div><div class="time-content"><div class="activity">リフレッシュ</div></div></div>
+    <div class="time-block"><div class="time-label">就寝前</div><div class="time-content"><div class="activity">勉強ブロック3</div><div class="detail">暗記・横断テキスト・軽めの復習</div></div><div class="time-hours">2h</div></div>
+    <div style="text-align:right; margin-top:8px;"><span class="time-hours" style="font-size:0.8rem;">合計 10h（うち復習1h含む）</span></div>
   </div>
-
   <div class="rules-box">
     <div style="font-weight:700; margin-bottom:6px;">ポイント</div>
-    <div class="rule">- 平日の隙間時間（中途半端で科目を進められない時）→ 横断テキスト読み込み</div>
+    <div class="rule">- 平日の隙間時間 → 横断テキスト読み込み</div>
     <div class="rule">- 土日の復習1hは必ず確保。2024年の電子問題集を活用</div>
     <div class="rule">- 週の最低目標：平日15h＋土日16h＝<strong>週31h</strong></div>
   </div>
@@ -610,95 +383,44 @@ body {
 
 <!-- ==================== PLAN ==================== -->
 <div class="section" id="sec-plan">
-
-  <!-- Phase 0: Completed -->
   <div class="phase-header" style="background: linear-gradient(135deg, #059669, #10b981);">
     <h2>Phase 0：労務篇（完了済み）</h2>
     <div class="phase-dates">〜 2026年3月15日</div>
   </div>
   <div class="phase-body">
-    <div class="checklist-item checked">
-      <input type="checkbox" checked disabled>
-      <div>
-        <div class="item-text">労働基準法 — テキスト・動画・問題集</div>
-        <div class="item-meta">完了</div>
-      </div>
-    </div>
-    <div class="checklist-item checked">
-      <input type="checkbox" checked disabled>
-      <div>
-        <div class="item-text">労働安全衛生法 — テキスト・動画・問題集</div>
-        <div class="item-meta">完了</div>
-      </div>
-    </div>
-    <div class="checklist-item checked">
-      <input type="checkbox" checked disabled>
-      <div>
-        <div class="item-text">労働者災害補償保険法 — テキスト・動画・問題集</div>
-        <div class="item-meta">完了</div>
-      </div>
-    </div>
-    <div class="checklist-item checked">
-      <input type="checkbox" checked disabled>
-      <div>
-        <div class="item-text">雇用保険法 — テキスト・動画・問題集</div>
-        <div class="item-meta">完了</div>
-      </div>
-    </div>
-    <div class="checklist-item checked">
-      <input type="checkbox" checked disabled>
-      <div>
-        <div class="item-text">労働保険徴収法 — テキスト・動画・問題集</div>
-        <div class="item-meta">完了</div>
-      </div>
-    </div>
-    <div class="checklist-item checked">
-      <input type="checkbox" checked disabled>
-      <div>
-        <div class="item-text">労働一般常識 — テキスト・動画・問題集</div>
-        <div class="item-meta">完了</div>
-      </div>
-    </div>
+    <div class="checklist-item checked"><input type="checkbox" checked disabled><div><div class="item-text">労働基準法 — テキスト・動画・問題集</div></div></div>
+    <div class="checklist-item checked"><input type="checkbox" checked disabled><div><div class="item-text">労働安全衛生法 — テキスト・動画・問題集</div></div></div>
+    <div class="checklist-item checked"><input type="checkbox" checked disabled><div><div class="item-text">労働者災害補償保険法 — テキスト・動画・問題集</div></div></div>
+    <div class="checklist-item checked"><input type="checkbox" checked disabled><div><div class="item-text">雇用保険法 — テキスト・動画・問題集</div></div></div>
+    <div class="checklist-item checked"><input type="checkbox" checked disabled><div><div class="item-text">労働保険徴収法 — テキスト・動画・問題集</div></div></div>
+    <div class="checklist-item checked"><input type="checkbox" checked disabled><div><div class="item-text">労働一般常識 — テキスト・動画・問題集</div></div></div>
   </div>
-
-  <!-- Phase 1 -->
-  <div class="phase-header">
-    <h2>Phase 1：社会保険篇インプット</h2>
-    <div class="phase-dates">3/16 〜 5/10（8週間）</div>
-  </div>
-  <div class="phase-body" id="phase1-body">
-    <div style="font-size:0.8rem; color:var(--gray-500); margin-bottom:8px; font-weight:600;">健康保険法（3/16〜3/29 ｜ 2週間）</div>
+  <div class="phase-header"><h2>Phase 1：社会保険篇インプット</h2><div class="phase-dates">3/16 〜 5/10（8週間）</div></div>
+  <div class="phase-body">
+    <div style="font-size:0.8rem; color:var(--gray-500); margin-bottom:8px; font-weight:600;">健康保険法（3/16〜3/29）</div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-1"><div><div class="item-text">健保 テキスト精読</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-2"><div><div class="item-text">健保 TAC動画視聴（※未配信の場合テキスト先行）</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-3"><div><div class="item-text">健保 一問一答＋選択式問題集</div></div></div>
-
-    <div style="font-size:0.8rem; color:var(--gray-500); margin:12px 0 8px; font-weight:600;">国民年金法（3/30〜4/19 ｜ 3週間）★最重要</div>
+    <div style="font-size:0.8rem; color:var(--gray-500); margin:12px 0 8px; font-weight:600;">国民年金法（3/30〜4/19）★最重要</div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-4"><div><div class="item-text">国年 テキスト精読</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-5"><div><div class="item-text">国年 TAC動画視聴</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-6"><div><div class="item-text">国年 一問一答＋選択式問題集</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-7"><div><div class="item-text">ミニ横断整理：健保 × 国年（被保険者・届出・給付比較）</div></div></div>
-
-    <div style="font-size:0.8rem; color:var(--gray-500); margin:12px 0 8px; font-weight:600;">厚生年金保険法（4/20〜5/10 ｜ 3週間）</div>
+    <div style="font-size:0.8rem; color:var(--gray-500); margin:12px 0 8px; font-weight:600;">厚生年金保険法（4/20〜5/10）</div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-8"><div><div class="item-text">厚年 テキスト精読</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-9"><div><div class="item-text">厚年 TAC動画視聴</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-10"><div><div class="item-text">厚年 一問一答＋選択式問題集</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-11"><div><div class="item-text">横断整理：国年 × 厚年（老齢・障害・遺族の比較）</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p1-12"><div><div class="item-text">横断整理：健保 × 厚年（適用・届出の比較）</div></div></div>
   </div>
-
-  <!-- Phase 2 -->
-  <div class="phase-header">
-    <h2>Phase 2：社保一般常識＋全科目復習</h2>
-    <div class="phase-dates">5/11 〜 6/14（5週間）</div>
-  </div>
-  <div class="phase-body" id="phase2-body">
-    <div style="font-size:0.8rem; color:var(--gray-500); margin-bottom:8px; font-weight:600;">社会保険一般常識（5/11〜5/24 ｜ 2週間）</div>
+  <div class="phase-header"><h2>Phase 2：社保一般常識＋全科目復習</h2><div class="phase-dates">5/11 〜 6/14（5週間）</div></div>
+  <div class="phase-body">
+    <div style="font-size:0.8rem; color:var(--gray-500); margin-bottom:8px; font-weight:600;">社会保険一般常識（5/11〜5/24）</div>
     <div class="checklist-item"><input type="checkbox" data-key="p2-1"><div><div class="item-text">社保一般 テキスト精読</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p2-2"><div><div class="item-text">社保一般 TAC動画視聴</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p2-3"><div><div class="item-text">社保一般 一問一答＋選択式問題集</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p2-4"><div><div class="item-text">全科目横断比較フェーズ（本格版）</div></div></div>
-
-    <div style="font-size:0.8rem; color:var(--gray-500); margin:12px 0 8px; font-weight:600;">全科目2回転目（5/25〜6/14 ｜ 3週間）</div>
+    <div style="font-size:0.8rem; color:var(--gray-500); margin:12px 0 8px; font-weight:600;">全科目2回転目（5/25〜6/14）</div>
     <div class="checklist-item"><input type="checkbox" data-key="p2-5"><div><div class="item-text">労基・安衛 問題集2回転目</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p2-6"><div><div class="item-text">労災・雇用・徴収 問題集2回転目</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p2-7"><div><div class="item-text">労働一般常識 問題集2回転目</div></div></div>
@@ -708,163 +430,264 @@ body {
     <div class="checklist-item"><input type="checkbox" data-key="p2-11"><div><div class="item-text">社保一般 問題集2回転目</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p2-12"><div><div class="item-text">横断テキスト 全範囲通読完了</div></div></div>
   </div>
-
-  <!-- Phase 3 -->
-  <div class="phase-header">
-    <h2>Phase 3：過去問演習＋模試</h2>
-    <div class="phase-dates">6/15 〜 7/26（6週間）</div>
-  </div>
-  <div class="phase-body" id="phase3-body">
+  <div class="phase-header"><h2>Phase 3：過去問演習＋模試</h2><div class="phase-dates">6/15 〜 7/26（6週間）</div></div>
+  <div class="phase-body">
     <div style="font-size:0.8rem; color:var(--gray-500); margin-bottom:8px; font-weight:600;">過去問5回転（年度別・本試験形式）</div>
-    <div class="checklist-item"><input type="checkbox" data-key="p3-1"><div><div class="item-text">過去問 1回転目 — テスト形式（時間計測・本番同様）</div><div class="item-meta">選択式80分＋択一式210分で実施</div></div></div>
+    <div class="checklist-item"><input type="checkbox" data-key="p3-1"><div><div class="item-text">過去問 1回転目 — テスト形式（時間計測・本番同様）</div><div class="item-meta">選択式80分＋択一式210分</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-2"><div><div class="item-text">過去問 1回転目 — 復習・解説読み込み</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-3"><div><div class="item-text">過去問 2回転目 — 文章読み込み重視・理解深化</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-4"><div><div class="item-text">過去問 3回転目 — 間違えた問題中心</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-5"><div><div class="item-text">過去問 4回転目 — 弱点科目重点</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-6"><div><div class="item-text">過去問 5回転目 — 最終確認</div></div></div>
-
     <div style="font-size:0.8rem; color:var(--gray-500); margin:12px 0 8px; font-weight:600;">模試</div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-7"><div><div class="item-text">TAC模試 第1回 受験＋復習</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-8"><div><div class="item-text">TAC模試 第2回 受験＋復習</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-9"><div><div class="item-text">他社模試（大原 or LEC）受験＋復習</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p3-10"><div><div class="item-text">模試の弱点分析 → 弱点ノート作成</div></div></div>
   </div>
-
-  <!-- Phase 4 -->
-  <div class="phase-header" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
-    <h2>Phase 4：直前期</h2>
-    <div class="phase-dates">7/27 〜 8/23（4週間）</div>
-  </div>
-  <div class="phase-body" id="phase4-body">
-    <div class="checklist-item"><input type="checkbox" data-key="p4-1"><div><div class="item-text">白書・統計対策（TAC直前資料＋市販対策本）</div><div class="item-meta">7/27〜8/2</div></div></div>
-    <div class="checklist-item"><input type="checkbox" data-key="p4-2"><div><div class="item-text">法改正対策（2026年施行分の集中学習）</div><div class="item-meta">8/3〜8/9</div></div></div>
-    <div class="checklist-item"><input type="checkbox" data-key="p4-3"><div><div class="item-text">全科目最終回転（苦手科目重点＋選択式対策）</div><div class="item-meta">8/10〜8/16</div></div></div>
-    <div class="checklist-item"><input type="checkbox" data-key="p4-4"><div><div class="item-text">暗記事項の総確認（数字・届出期限・横断）</div><div class="item-meta">8/17〜8/22</div></div></div>
-    <div class="checklist-item"><input type="checkbox" data-key="p4-5"><div><div class="item-text">前日：軽めの復習＋体調管理＋持ち物確認</div><div class="item-meta">8/22</div></div></div>
+  <div class="phase-header" style="background: linear-gradient(135deg, #dc2626, #ef4444);"><h2>Phase 4：直前期</h2><div class="phase-dates">7/27 〜 8/23（4週間）</div></div>
+  <div class="phase-body">
+    <div class="checklist-item"><input type="checkbox" data-key="p4-1"><div><div class="item-text">白書・統計対策</div><div class="item-meta">7/27〜8/2</div></div></div>
+    <div class="checklist-item"><input type="checkbox" data-key="p4-2"><div><div class="item-text">法改正対策（2026年施行分）</div><div class="item-meta">8/3〜8/9</div></div></div>
+    <div class="checklist-item"><input type="checkbox" data-key="p4-3"><div><div class="item-text">全科目最終回転（苦手重点＋選択式対策）</div><div class="item-meta">8/10〜8/16</div></div></div>
+    <div class="checklist-item"><input type="checkbox" data-key="p4-4"><div><div class="item-text">暗記事項の総確認</div><div class="item-meta">8/17〜8/22</div></div></div>
+    <div class="checklist-item"><input type="checkbox" data-key="p4-5"><div><div class="item-text">前日：軽めの復習＋体調管理</div><div class="item-meta">8/22</div></div></div>
     <div class="checklist-item"><input type="checkbox" data-key="p4-6"><div><div class="item-text">本番 受験</div><div class="item-meta">8/23</div></div></div>
   </div>
-
 </div>
 
-<!-- ==================== LOG ==================== -->
-<div class="section" id="sec-log">
-
-  <div class="log-form">
-    <h3>勉強記録を追加</h3>
-    <div class="form-row">
-      <div class="form-group">
-        <label>日付</label>
-        <input type="date" id="log-date">
-      </div>
-      <div class="form-group">
-        <label>学習時間（時間）</label>
-        <input type="number" id="log-hours" step="0.5" min="0" max="16" placeholder="3">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>科目</label>
-      <select id="log-subject">
-        <option value="">選択してください</option>
-        <option value="労働基準法">労働基準法</option>
-        <option value="労働安全衛生法">労働安全衛生法</option>
-        <option value="労災保険法">労災保険法</option>
-        <option value="雇用保険法">雇用保険法</option>
-        <option value="労働保険徴収法">労働保険徴収法</option>
-        <option value="労働一般常識">労働一般常識</option>
-        <option value="健康保険法">健康保険法</option>
-        <option value="国民年金法">国民年金法</option>
-        <option value="厚生年金保険法">厚生年金保険法</option>
-        <option value="社保一般常識">社保一般常識</option>
-        <option value="横断整理">横断整理</option>
-        <option value="過去問演習">過去問演習</option>
-        <option value="模試">模試</option>
-        <option value="白書・統計">白書・統計</option>
-        <option value="法改正">法改正</option>
-        <option value="その他">その他</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>学習内容（やったこと・気づき）</label>
-      <textarea id="log-memo" rows="3" placeholder="例: 健保のテキスト第3章まで読了。任意継続の要件があいまい、復習が必要。"></textarea>
-    </div>
-    <button class="btn btn-primary" onclick="addLog()" style="width:100%;">記録を保存</button>
+<!-- ==================== RECORD ==================== -->
+<div class="section" id="sec-record">
+  <div class="sub-tabs">
+    <button class="sub-tab active" data-color="blue" data-sub="study" onclick="switchSub('study')">勉強記録</button>
+    <button class="sub-tab" data-color="purple" data-sub="daily" onclick="switchSub('daily')">1日1記録</button>
+    <button class="sub-tab" data-color="teal" data-sub="weekly" onclick="switchSub('weekly')">週次翻訳</button>
+    <button class="sub-tab" data-color="orange" data-sub="monthly" onclick="switchSub('monthly')">月次提案</button>
   </div>
 
+  <!-- 勉強記録 -->
+  <div class="sub-section active" id="sub-study">
+    <div class="log-form">
+      <h3>勉強記録</h3>
+      <div class="form-row">
+        <div class="form-group"><label>日付</label><input type="date" id="log-date"></div>
+        <div class="form-group"><label>学習時間（時間）</label><input type="number" id="log-hours" step="0.5" min="0" max="16" placeholder="3"></div>
+      </div>
+      <div class="form-group">
+        <label>科目</label>
+        <select id="log-subject">
+          <option value="">選択してください</option>
+          <option value="労働基準法">労働基準法</option>
+          <option value="労働安全衛生法">労働安全衛生法</option>
+          <option value="労災保険法">労災保険法</option>
+          <option value="雇用保険法">雇用保険法</option>
+          <option value="労働保険徴収法">労働保険徴収法</option>
+          <option value="労働一般常識">労働一般常識</option>
+          <option value="健康保険法">健康保険法</option>
+          <option value="国民年金法">国民年金法</option>
+          <option value="厚生年金保険法">厚生年金保険法</option>
+          <option value="社保一般常識">社保一般常識</option>
+          <option value="横断整理">横断整理</option>
+          <option value="過去問演習">過去問演習</option>
+          <option value="模試">模試</option>
+          <option value="白書・統計">白書・統計</option>
+          <option value="法改正">法改正</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>学習内容・気づき</label>
+        <textarea id="log-memo" rows="3" placeholder="例: 健保テキスト第3章まで読了。任意継続の要件が曖昧、復習必要。"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="addStudyLog()" style="width:100%;">記録を保存</button>
+    </div>
+  </div>
+
+  <!-- 1日1記録ノート -->
+  <div class="sub-section" id="sub-daily">
+    <div class="log-form" style="border-left: 4px solid var(--purple);">
+      <h3 style="color:var(--purple);">1日1記録ノート</h3>
+      <div class="form-group hint" style="color:var(--gray-500); font-size:0.8rem; margin-bottom:12px;">
+        今日一番印象に残った仕事の場面を1つだけ。全項目埋めなくてOK、1行でも書けば成功。
+      </div>
+      <div class="form-group"><label>日付</label><input type="date" id="daily-date"></div>
+      <div class="form-group">
+        <label>今日の場面</label>
+        <div class="hint">一番印象に残った仕事の場面・会話・出来事を1つ</div>
+        <textarea id="daily-scene" rows="2" placeholder="例: 社長が「採用しても3ヶ月で辞める」とぼやいていた"></textarea>
+      </div>
+      <div class="form-group">
+        <label>労務の視点：社労士の目で見たら？</label>
+        <textarea id="daily-labor" rows="2" placeholder="どんな労務課題がある？どの法律・制度が関係する？"></textarea>
+      </div>
+      <div class="form-group">
+        <label>AIの視点：AIを活用するなら？</label>
+        <textarea id="daily-ai" rows="2" placeholder="この課題にAIを使うなら、どんなアプローチ？"></textarea>
+      </div>
+      <div class="form-group">
+        <label>もし自分がコンサルなら？</label>
+        <textarea id="daily-consul" rows="2" placeholder="自分ならどんな提案をする？（1〜2行でOK）"></textarea>
+      </div>
+      <div class="form-group">
+        <label>一言メモ（任意）</label>
+        <textarea id="daily-memo" rows="1" placeholder="感じたこと、疑問、次に調べたいこと等"></textarea>
+      </div>
+      <div class="form-group">
+        <label>今日の観察意識スコア</label>
+        <div class="scale-input">
+          <label><input type="radio" name="daily-score" value="1"><span>1</span></label>
+          <label><input type="radio" name="daily-score" value="2"><span>2</span></label>
+          <label><input type="radio" name="daily-score" value="3"><span>3</span></label>
+          <label><input type="radio" name="daily-score" value="4"><span>4</span></label>
+          <label><input type="radio" name="daily-score" value="5"><span>5</span></label>
+        </div>
+        <div class="scale-labels"><span>ほとんど意識できなかった</span><span>常に意識できた</span></div>
+      </div>
+      <button class="btn btn-purple" onclick="addDailyLog()" style="width:100%;">記録を保存</button>
+    </div>
+  </div>
+
+  <!-- 週次翻訳 -->
+  <div class="sub-section" id="sub-weekly">
+    <div class="log-form" style="border-left: 4px solid var(--teal);">
+      <h3 style="color:var(--teal);">週次：経営者の言葉翻訳シート</h3>
+      <div class="form-group hint" style="color:var(--gray-500); font-size:0.8rem; margin-bottom:12px;">
+        今週、社長や経営層から聞いた言葉を1つ選んで、3つの視点で翻訳する。所要時間：15分
+      </div>
+      <div class="form-group"><label>対象週の開始日（月曜日）</label><input type="date" id="weekly-date"></div>
+      <div class="form-group">
+        <label>経営者の発言（原文）</label>
+        <textarea id="weekly-quote" rows="2" placeholder="できるだけ原文のまま記録する"></textarea>
+      </div>
+      <div class="form-group">
+        <label>誰が・どんな場面で言った？</label>
+        <input type="text" id="weekly-who" placeholder="例: 社長が朝会で / 親会社の役員がAI導入MTGで">
+      </div>
+      <div class="form-group">
+        <label>労務の翻訳（社労士として）</label>
+        <textarea id="weekly-labor" rows="2" placeholder="労務・人事の専門家として聞いたら、何が課題？"></textarea>
+      </div>
+      <div class="form-group">
+        <label>経営の翻訳（診断士として）</label>
+        <textarea id="weekly-biz" rows="2" placeholder="経営戦略・組織論の観点から、裏にある経営課題は？"></textarea>
+      </div>
+      <div class="form-group">
+        <label>AIの翻訳（AIコンサルとして）</label>
+        <textarea id="weekly-ai" rows="2" placeholder="この課題にAIを活用するなら？"></textarea>
+      </div>
+      <div class="form-group">
+        <label>今週の学び（1行で）</label>
+        <input type="text" id="weekly-learning" placeholder="">
+      </div>
+      <button class="btn btn-teal" onclick="addWeeklyLog()" style="width:100%;">記録を保存</button>
+    </div>
+  </div>
+
+  <!-- 月次提案 -->
+  <div class="sub-section" id="sub-monthly">
+    <div class="log-form" style="border-left: 4px solid var(--orange);">
+      <h3 style="color:var(--orange);">月次：仮想コンサル提案書</h3>
+      <div class="form-group hint" style="color:var(--gray-500); font-size:0.8rem; margin-bottom:12px;">
+        その月で一番印象に残った経営課題を1つ選んで提案書を作る。完璧でなくてOK。所要時間：30分
+      </div>
+      <div class="form-group"><label>対象年月</label><input type="text" id="monthly-month" placeholder="例: 2026年4月"></div>
+      <div class="form-group"><label>業種・従業員規模</label><input type="text" id="monthly-company" placeholder="例: 従業員50名の建設会社"></div>
+      <div class="form-group">
+        <label>経営者の声（生の言葉）</label>
+        <textarea id="monthly-voice" rows="2" placeholder="経営者がこの課題について実際に言いそうな言葉で"></textarea>
+      </div>
+      <div class="form-group">
+        <label>課題の要約（1行で）</label>
+        <input type="text" id="monthly-issue" placeholder="">
+      </div>
+      <div class="form-group">
+        <label>提案：労務の観点</label>
+        <textarea id="monthly-labor" rows="2" placeholder="社労士として、制度・規程・労務管理の面から"></textarea>
+      </div>
+      <div class="form-group">
+        <label>提案：AIの観点</label>
+        <textarea id="monthly-ai" rows="2" placeholder="AIコンサルとして、テクノロジー活用の面から"></textarea>
+      </div>
+      <div class="form-group">
+        <label>提案：経営の観点</label>
+        <textarea id="monthly-biz" rows="2" placeholder="診断士として、経営戦略・組織設計の面から"></textarea>
+      </div>
+      <div class="form-group">
+        <label>改善指標と目標</label>
+        <input type="text" id="monthly-kpi" placeholder="例: 離職率 20% → 10%">
+      </div>
+      <div class="form-group">
+        <label>提案書を書いて気づいたこと</label>
+        <textarea id="monthly-reflection" rows="2" placeholder="難しかったこと、新しく学んだこと等"></textarea>
+      </div>
+      <div class="form-group">
+        <label>提案の自信度</label>
+        <div class="scale-input">
+          <label><input type="radio" name="monthly-score" value="1"><span>1</span></label>
+          <label><input type="radio" name="monthly-score" value="2"><span>2</span></label>
+          <label><input type="radio" name="monthly-score" value="3"><span>3</span></label>
+          <label><input type="radio" name="monthly-score" value="4"><span>4</span></label>
+          <label><input type="radio" name="monthly-score" value="5"><span>5</span></label>
+        </div>
+        <div class="scale-labels"><span>まだ全然自信なし</span><span>かなり自信あり</span></div>
+      </div>
+      <button class="btn btn-orange" onclick="addMonthlyLog()" style="width:100%;">記録を保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== HISTORY ==================== -->
+<div class="section" id="sec-history">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-    <h3 style="font-size:1rem;">学習記録一覧</h3>
+    <h3 style="font-size:1rem;">記録一覧</h3>
     <span id="log-count" style="font-size:0.8rem; color:var(--gray-500);"></span>
   </div>
-
   <div class="filter-row">
     <button class="filter-btn active" data-filter="all" onclick="filterLogs('all')">すべて</button>
-    <button class="filter-btn" data-filter="this-week" onclick="filterLogs('this-week')">今週</button>
-    <button class="filter-btn" data-filter="this-month" onclick="filterLogs('this-month')">今月</button>
+    <button class="filter-btn" data-filter="study" onclick="filterLogs('study')">勉強</button>
+    <button class="filter-btn" data-filter="daily" onclick="filterLogs('daily')">1日1記録</button>
+    <button class="filter-btn" data-filter="weekly" onclick="filterLogs('weekly')">週次</button>
+    <button class="filter-btn" data-filter="monthly" onclick="filterLogs('monthly')">月次</button>
   </div>
-
   <div id="log-list"></div>
 </div>
 
 <!-- ==================== STATS ==================== -->
 <div class="section" id="sec-stats">
-
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-number" id="stats-total">0</div>
-      <div class="stat-label">累計(h)</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="stats-avg">0</div>
-      <div class="stat-label">日平均(h)</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="stats-days">0</div>
-      <div class="stat-label">学習日数</div>
-    </div>
+    <div class="stat-card"><div class="stat-number" id="stats-total">0</div><div class="stat-label">累計(h)</div></div>
+    <div class="stat-card"><div class="stat-number" id="stats-avg">0</div><div class="stat-label">日平均(h)</div></div>
+    <div class="stat-card"><div class="stat-number" id="stats-days">0</div><div class="stat-label">学習日数</div></div>
   </div>
-
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-number" id="stats-daily-count" style="color:var(--purple);">0</div><div class="stat-label">1日1記録</div></div>
+    <div class="stat-card"><div class="stat-number" id="stats-weekly-count" style="color:var(--teal);">0</div><div class="stat-label">週次翻訳</div></div>
+    <div class="stat-card"><div class="stat-number" id="stats-monthly-count" style="color:var(--orange);">0</div><div class="stat-label">月次提案</div></div>
+  </div>
   <div class="weekly-chart">
     <div style="font-weight:700; font-size:0.9rem; margin-bottom:12px;">直近7週間の学習時間</div>
     <div class="chart-bars" id="weekly-bars"></div>
   </div>
-
-  <div class="card">
-    <h3>科目別学習時間</h3>
-    <div id="subject-breakdown" style="margin-top:8px;"></div>
-  </div>
-
-  <div class="card">
-    <h3>目標ペース判定</h3>
-    <div id="pace-check" style="margin-top:8px; font-size:0.85rem;"></div>
-  </div>
+  <div class="card"><h3>科目別学習時間</h3><div id="subject-breakdown" style="margin-top:8px;"></div></div>
+  <div class="card"><h3>目標ペース判定</h3><div id="pace-check" style="margin-top:8px; font-size:0.85rem;"></div></div>
 </div>
 
-</div><!-- /container -->
+</div>
 
 <script>
-// ===== DATA MANAGEMENT =====
-const STORAGE_KEYS = {
-  checks: 'sr26_checks',
-  logs: 'sr26_logs'
-};
+const STORAGE_KEYS = { checks: 'sr26_checks', logs: 'sr26_logs' };
+function loadChecks() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.checks) || '{}'); } catch { return {}; } }
+function saveChecks(d) { localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(d)); }
+function loadLogs() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.logs) || '[]'); } catch { return []; } }
+function saveLogs(d) { localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(d)); }
 
-function loadChecks() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.checks) || '{}'); } catch { return {}; }
-}
-function saveChecks(data) { localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(data)); }
-function loadLogs() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.logs) || '[]'); } catch { return []; }
-}
-function saveLogs(data) { localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(data)); }
-
-// ===== COUNTDOWN =====
+// Countdown
 function updateCountdown() {
-  const exam = new Date(2026, 7, 23); // Aug 23, 2026
-  const now = new Date();
-  const diff = Math.ceil((exam - now) / (1000 * 60 * 60 * 24));
+  const diff = Math.ceil((new Date(2026,7,23) - new Date()) / 864e5);
   document.getElementById('countdown-days').textContent = diff;
 }
 
-// ===== TABS =====
+// Tabs
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -872,299 +695,252 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     document.getElementById('sec-' + tab.dataset.tab).classList.add('active');
     if (tab.dataset.tab === 'stats') updateStats();
-    if (tab.dataset.tab === 'log') renderLogs();
+    if (tab.dataset.tab === 'history') renderLogs();
     if (tab.dataset.tab === 'dashboard') updateDashboard();
   });
 });
 
-// ===== CHECKBOXES =====
+// Sub-tabs
+function switchSub(name) {
+  document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sub-section').forEach(s => s.classList.remove('active'));
+  document.querySelector(`.sub-tab[data-sub="${name}"]`).classList.add('active');
+  document.getElementById('sub-' + name).classList.add('active');
+}
+
+// Checkboxes
 function initCheckboxes() {
   const checks = loadChecks();
   document.querySelectorAll('.checklist-item input[data-key]').forEach(cb => {
     cb.checked = !!checks[cb.dataset.key];
     if (cb.checked) cb.closest('.checklist-item').classList.add('checked');
     cb.addEventListener('change', () => {
-      const data = loadChecks();
-      data[cb.dataset.key] = cb.checked;
-      saveChecks(data);
+      const d = loadChecks(); d[cb.dataset.key] = cb.checked; saveChecks(d);
       cb.closest('.checklist-item').classList.toggle('checked', cb.checked);
       updateDashboard();
     });
   });
 }
 
-// ===== DASHBOARD =====
+// Dashboard
 function updateDashboard() {
   const checks = loadChecks();
-  const allKeys = [];
-  document.querySelectorAll('.checklist-item input[data-key]').forEach(cb => allKeys.push(cb.dataset.key));
-  const done = allKeys.filter(k => checks[k]).length;
-  const total = allKeys.length;
-  const pct = total ? Math.round((done / total) * 100) : 0;
-
-  document.getElementById('progress-pct').textContent = pct + '%';
-  document.getElementById('progress-bar').style.width = pct + '%';
-  document.getElementById('progress-done').textContent = done + ' / ' + total + ' 完了';
-
-  // Current phase
+  const allKeys = []; document.querySelectorAll('.checklist-item input[data-key]').forEach(cb => allKeys.push(cb.dataset.key));
+  const done = allKeys.filter(k => checks[k]).length, total = allKeys.length;
+  const pct = total ? Math.round((done/total)*100) : 0;
+  document.getElementById('progress-pct').textContent = pct+'%';
+  document.getElementById('progress-bar').style.width = pct+'%';
+  document.getElementById('progress-done').textContent = done+' / '+total+' 完了';
   const phases = [
-    { keys: allKeys.filter(k => k.startsWith('p1-')), name: 'Phase 1: 社会保険篇' },
-    { keys: allKeys.filter(k => k.startsWith('p2-')), name: 'Phase 2: 復習＋横断' },
-    { keys: allKeys.filter(k => k.startsWith('p3-')), name: 'Phase 3: 過去問＋模試' },
-    { keys: allKeys.filter(k => k.startsWith('p4-')), name: 'Phase 4: 直前期' },
+    {keys: allKeys.filter(k=>k.startsWith('p1-')), name:'Phase 1: 社会保険篇'},
+    {keys: allKeys.filter(k=>k.startsWith('p2-')), name:'Phase 2: 復習＋横断'},
+    {keys: allKeys.filter(k=>k.startsWith('p3-')), name:'Phase 3: 過去問＋模試'},
+    {keys: allKeys.filter(k=>k.startsWith('p4-')), name:'Phase 4: 直前期'},
   ];
-  let currentPhase = 'すべて完了';
-  for (const p of phases) {
-    if (p.keys.some(k => !checks[k])) { currentPhase = p.name; break; }
-  }
-  document.getElementById('current-phase').textContent = currentPhase;
+  let cp = 'すべて完了';
+  for (const p of phases) { if (p.keys.some(k=>!checks[k])) { cp=p.name; break; } }
+  document.getElementById('current-phase').textContent = cp;
+  const tasksEl = document.getElementById('current-tasks'), next = [];
+  for (const k of allKeys) { if (!checks[k] && next.length < 3) { const el=document.querySelector(`input[data-key="${k}"]`); if(el) next.push(el.closest('.checklist-item').querySelector('.item-text').textContent); } }
+  tasksEl.innerHTML = next.length ? next.map((t,i)=>`<div style="padding:6px 0;border-bottom:1px solid var(--gray-100);">${i===0?'<strong style="color:var(--warning);">NEXT → </strong>':''}${t}</div>`).join('') : '<div style="color:var(--success);font-weight:600;">すべてのタスクが完了</div>';
 
-  // Current tasks
-  const tasksEl = document.getElementById('current-tasks');
-  const nextTasks = [];
-  for (const k of allKeys) {
-    if (!checks[k] && nextTasks.length < 3) {
-      const el = document.querySelector(`input[data-key="${k}"]`);
-      if (el) nextTasks.push(el.closest('.checklist-item').querySelector('.item-text').textContent);
-    }
-  }
-  tasksEl.innerHTML = nextTasks.length
-    ? nextTasks.map((t, i) => `<div style="padding:6px 0;border-bottom:1px solid var(--gray-100);">${i === 0 ? '<strong style="color:var(--warning);">NEXT → </strong>' : ''}${t}</div>`).join('')
-    : '<div style="color:var(--success); font-weight:600;">すべてのタスクが完了しています</div>';
-
-  // Log stats
   const logs = loadLogs();
-  const totalHours = logs.reduce((s, l) => s + (parseFloat(l.hours) || 0), 0);
-  document.getElementById('total-hours').textContent = totalHours.toFixed(1);
-
-  // This week
-  const now = new Date();
-  const weekStart = new Date(now);
-  weekStart.setDate(now.getDate() - now.getDay());
-  weekStart.setHours(0, 0, 0, 0);
-  const weekHours = logs
-    .filter(l => new Date(l.date) >= weekStart)
-    .reduce((s, l) => s + (parseFloat(l.hours) || 0), 0);
-  document.getElementById('this-week-hours').textContent = weekHours.toFixed(1);
-
-  // Streak
-  const uniqueDates = [...new Set(logs.map(l => l.date))].sort().reverse();
-  let streak = 0;
-  const today = now.toISOString().slice(0, 10);
-  let checkDate = new Date(now);
-  // allow today or yesterday as start
-  if (uniqueDates[0] !== today) {
-    checkDate.setDate(checkDate.getDate() - 1);
-  }
-  for (let i = 0; i < 365; i++) {
-    const ds = checkDate.toISOString().slice(0, 10);
-    if (uniqueDates.includes(ds)) {
-      streak++;
-      checkDate.setDate(checkDate.getDate() - 1);
-    } else break;
-  }
+  const studyLogs = logs.filter(l=>l.type==='study');
+  const totalH = studyLogs.reduce((s,l)=>s+(parseFloat(l.hours)||0),0);
+  document.getElementById('total-hours').textContent = totalH.toFixed(1);
+  const now = new Date(), ws = new Date(now); ws.setDate(now.getDate()-now.getDay()); ws.setHours(0,0,0,0);
+  const wh = studyLogs.filter(l=>new Date(l.date)>=ws).reduce((s,l)=>s+(parseFloat(l.hours)||0),0);
+  document.getElementById('this-week-hours').textContent = wh.toFixed(1);
+  const ud = [...new Set(studyLogs.map(l=>l.date))].sort().reverse();
+  let streak=0, cd=new Date(now); const today=now.toISOString().slice(0,10);
+  if(ud[0]!==today) cd.setDate(cd.getDate()-1);
+  for(let i=0;i<365;i++){const ds=cd.toISOString().slice(0,10);if(ud.includes(ds)){streak++;cd.setDate(cd.getDate()-1);}else break;}
   document.getElementById('streak-days').textContent = streak;
 }
 
-// ===== STUDY LOG =====
-function addLog() {
-  const date = document.getElementById('log-date').value;
-  const hours = document.getElementById('log-hours').value;
-  const subject = document.getElementById('log-subject').value;
-  const memo = document.getElementById('log-memo').value;
+// === LOG FUNCTIONS ===
+function addStudyLog() {
+  const date=document.getElementById('log-date').value, hours=document.getElementById('log-hours').value;
+  const subject=document.getElementById('log-subject').value, memo=document.getElementById('log-memo').value;
+  if(!date||!hours){alert('日付と学習時間は必須です');return;}
+  const logs=loadLogs();
+  logs.push({id:Date.now(),type:'study',date,hours:parseFloat(hours),subject,memo});
+  logs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id); saveLogs(logs);
+  document.getElementById('log-hours').value=''; document.getElementById('log-subject').value=''; document.getElementById('log-memo').value='';
+  updateDashboard(); alert('勉強記録を保存しました');
+}
 
-  if (!date || !hours) { alert('日付と学習時間は必須です'); return; }
+function addDailyLog() {
+  const date=document.getElementById('daily-date').value;
+  const scene=document.getElementById('daily-scene').value;
+  if(!date||!scene){alert('日付と場面は必須です');return;}
+  const score=document.querySelector('input[name="daily-score"]:checked');
+  const logs=loadLogs();
+  logs.push({id:Date.now(),type:'daily',date,
+    scene, labor:document.getElementById('daily-labor').value,
+    ai:document.getElementById('daily-ai').value, consul:document.getElementById('daily-consul').value,
+    memo:document.getElementById('daily-memo').value, score:score?score.value:''
+  });
+  logs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id); saveLogs(logs);
+  ['daily-scene','daily-labor','daily-ai','daily-consul','daily-memo'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('input[name="daily-score"]').forEach(r=>r.checked=false);
+  updateDashboard(); alert('1日1記録を保存しました');
+}
 
-  const logs = loadLogs();
-  logs.push({ id: Date.now(), date, hours: parseFloat(hours), subject, memo });
-  logs.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
-  saveLogs(logs);
+function addWeeklyLog() {
+  const date=document.getElementById('weekly-date').value;
+  const quote=document.getElementById('weekly-quote').value;
+  if(!date||!quote){alert('日付と発言は必須です');return;}
+  const logs=loadLogs();
+  logs.push({id:Date.now(),type:'weekly',date,
+    quote, who:document.getElementById('weekly-who').value,
+    labor:document.getElementById('weekly-labor').value, biz:document.getElementById('weekly-biz').value,
+    ai:document.getElementById('weekly-ai').value, learning:document.getElementById('weekly-learning').value
+  });
+  logs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id); saveLogs(logs);
+  ['weekly-quote','weekly-who','weekly-labor','weekly-biz','weekly-ai','weekly-learning'].forEach(id=>document.getElementById(id).value='');
+  updateDashboard(); alert('週次翻訳を保存しました');
+}
 
-  document.getElementById('log-hours').value = '';
-  document.getElementById('log-subject').value = '';
-  document.getElementById('log-memo').value = '';
-
-  renderLogs();
-  updateDashboard();
+function addMonthlyLog() {
+  const month=document.getElementById('monthly-month').value;
+  const voice=document.getElementById('monthly-voice').value;
+  if(!month||!voice){alert('対象年月と経営者の声は必須です');return;}
+  const score=document.querySelector('input[name="monthly-score"]:checked');
+  const logs=loadLogs();
+  logs.push({id:Date.now(),type:'monthly',date:new Date().toISOString().slice(0,10),
+    month, company:document.getElementById('monthly-company').value,
+    voice, issue:document.getElementById('monthly-issue').value,
+    labor:document.getElementById('monthly-labor').value, ai:document.getElementById('monthly-ai').value,
+    biz:document.getElementById('monthly-biz').value, kpi:document.getElementById('monthly-kpi').value,
+    reflection:document.getElementById('monthly-reflection').value, score:score?score.value:''
+  });
+  logs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id); saveLogs(logs);
+  ['monthly-month','monthly-company','monthly-voice','monthly-issue','monthly-labor','monthly-ai','monthly-biz','monthly-kpi','monthly-reflection'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('input[name="monthly-score"]').forEach(r=>r.checked=false);
+  updateDashboard(); alert('月次提案を保存しました');
 }
 
 function deleteLog(id) {
-  if (!confirm('この記録を削除しますか？')) return;
-  const logs = loadLogs().filter(l => l.id !== id);
-  saveLogs(logs);
-  renderLogs();
-  updateDashboard();
+  if(!confirm('この記録を削除しますか？'))return;
+  saveLogs(loadLogs().filter(l=>l.id!==id)); renderLogs(); updateDashboard();
 }
 
-let currentFilter = 'all';
-function filterLogs(filter) {
-  currentFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+// Render
+let currentFilter='all';
+function filterLogs(f) {
+  currentFilter=f;
+  document.querySelectorAll('#sec-history .filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.filter===f));
   renderLogs();
 }
 
 function renderLogs() {
-  const logs = loadLogs();
-  const now = new Date();
-  let filtered = logs;
+  const logs=loadLogs();
+  let filtered = currentFilter==='all' ? logs : logs.filter(l=>l.type===currentFilter);
+  const studyH = filtered.filter(l=>l.type==='study').reduce((s,l)=>s+(l.hours||0),0);
+  document.getElementById('log-count').textContent = `${filtered.length}件${studyH?' / '+studyH.toFixed(1)+'h':''}`;
+  const list=document.getElementById('log-list');
+  if(!filtered.length){list.innerHTML='<div style="text-align:center;color:var(--gray-500);padding:32px;font-size:0.85rem;">まだ記録がありません</div>';return;}
 
-  if (currentFilter === 'this-week') {
-    const weekStart = new Date(now);
-    weekStart.setDate(now.getDate() - now.getDay());
-    weekStart.setHours(0, 0, 0, 0);
-    filtered = logs.filter(l => new Date(l.date) >= weekStart);
-  } else if (currentFilter === 'this-month') {
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    filtered = logs.filter(l => new Date(l.date) >= monthStart);
-  }
-
-  const totalH = filtered.reduce((s, l) => s + (l.hours || 0), 0);
-  document.getElementById('log-count').textContent = `${filtered.length}件 / ${totalH.toFixed(1)}h`;
-
-  const list = document.getElementById('log-list');
-  if (filtered.length === 0) {
-    list.innerHTML = '<div style="text-align:center; color:var(--gray-500); padding:32px; font-size:0.85rem;">まだ記録がありません</div>';
-    return;
-  }
-
-  list.innerHTML = filtered.map(l => `
-    <div class="log-entry">
+  list.innerHTML = filtered.map(l => {
+    const colors = {study:'var(--primary)',daily:'var(--purple)',weekly:'var(--teal)',monthly:'var(--orange)'};
+    const labels = {study:'勉強',daily:'1日1記録',weekly:'週次翻訳',monthly:'月次提案'};
+    let body = '';
+    if(l.type==='study') {
+      body = `${l.subject?`<div class="log-subject">${l.subject}</div>`:''}${l.memo?`<div class="log-memo">${esc(l.memo)}</div>`:''}`;
+    } else if(l.type==='daily') {
+      body = `<div class="log-memo"><strong>場面：</strong>${esc(l.scene)}</div>`;
+      if(l.labor) body += `<div class="log-detail-row"><span class="log-detail-label">労務：</span>${esc(l.labor)}</div>`;
+      if(l.ai) body += `<div class="log-detail-row"><span class="log-detail-label">AI：</span>${esc(l.ai)}</div>`;
+      if(l.consul) body += `<div class="log-detail-row"><span class="log-detail-label">コンサル：</span>${esc(l.consul)}</div>`;
+      if(l.score) body += `<div class="log-detail-row"><span class="log-detail-label">観察スコア：</span>${l.score}/5</div>`;
+    } else if(l.type==='weekly') {
+      body = `<div class="log-memo"><strong>「${esc(l.quote)}」</strong>${l.who?' — '+esc(l.who):''}</div>`;
+      if(l.labor) body += `<div class="log-detail-row"><span class="log-detail-label">労務翻訳：</span>${esc(l.labor)}</div>`;
+      if(l.biz) body += `<div class="log-detail-row"><span class="log-detail-label">経営翻訳：</span>${esc(l.biz)}</div>`;
+      if(l.ai) body += `<div class="log-detail-row"><span class="log-detail-label">AI翻訳：</span>${esc(l.ai)}</div>`;
+      if(l.learning) body += `<div class="log-detail-row"><span class="log-detail-label">学び：</span>${esc(l.learning)}</div>`;
+    } else if(l.type==='monthly') {
+      body = `<div class="log-memo"><strong>${esc(l.month)} | ${esc(l.company||'')}</strong></div>`;
+      body += `<div class="log-detail-row"><span class="log-detail-label">声：</span>${esc(l.voice)}</div>`;
+      if(l.issue) body += `<div class="log-detail-row"><span class="log-detail-label">課題：</span>${esc(l.issue)}</div>`;
+      if(l.labor) body += `<div class="log-detail-row"><span class="log-detail-label">労務提案：</span>${esc(l.labor)}</div>`;
+      if(l.ai) body += `<div class="log-detail-row"><span class="log-detail-label">AI提案：</span>${esc(l.ai)}</div>`;
+      if(l.biz) body += `<div class="log-detail-row"><span class="log-detail-label">経営提案：</span>${esc(l.biz)}</div>`;
+      if(l.kpi) body += `<div class="log-detail-row"><span class="log-detail-label">KPI：</span>${esc(l.kpi)}</div>`;
+      if(l.score) body += `<div class="log-detail-row"><span class="log-detail-label">自信度：</span>${l.score}/5</div>`;
+    }
+    return `<div class="log-entry" data-type="${l.type}">
       <div class="log-entry-header">
         <div>
-          <span class="log-date">${formatDate(l.date)}</span>
-          ${l.subject ? `<span class="log-subject" style="margin-left:8px;">${l.subject}</span>` : ''}
+          <span class="log-date">${fmtDate(l.date)}</span>
+          <span class="log-type-badge" style="margin-left:6px;background:${colors[l.type]}20;color:${colors[l.type]};">${labels[l.type]}</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
-          <span class="log-hours">${l.hours}h</span>
-          <button class="log-delete" onclick="deleteLog(${l.id})" title="削除">&times;</button>
+          ${l.hours?`<span class="log-hours">${l.hours}h</span>`:''}
+          <button class="log-delete" onclick="deleteLog(${l.id})">&times;</button>
         </div>
-      </div>
-      ${l.memo ? `<div class="log-memo">${escapeHtml(l.memo)}</div>` : ''}
-    </div>
-  `).join('');
+      </div>${body}</div>`;
+  }).join('');
 }
 
-function formatDate(ds) {
-  const d = new Date(ds + 'T00:00:00');
-  const days = ['日', '月', '火', '水', '木', '金', '土'];
-  return `${d.getMonth() + 1}/${d.getDate()}（${days[d.getDay()]}）`;
-}
+function fmtDate(ds){const d=new Date(ds+'T00:00:00');const w=['日','月','火','水','木','金','土'];return `${d.getMonth()+1}/${d.getDate()}（${w[d.getDay()]}）`;}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
-function escapeHtml(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
-
-// ===== STATS =====
+// Stats
 function updateStats() {
-  const logs = loadLogs();
-  const totalH = logs.reduce((s, l) => s + (l.hours || 0), 0);
-  const uniqueDays = new Set(logs.map(l => l.date)).size;
-  const avgH = uniqueDays ? (totalH / uniqueDays) : 0;
+  const logs=loadLogs();
+  const sl=logs.filter(l=>l.type==='study');
+  const totalH=sl.reduce((s,l)=>s+(l.hours||0),0);
+  const ud=new Set(sl.map(l=>l.date)).size;
+  document.getElementById('stats-total').textContent=totalH.toFixed(1);
+  document.getElementById('stats-avg').textContent=ud?(totalH/ud).toFixed(1):'0';
+  document.getElementById('stats-days').textContent=ud;
+  document.getElementById('stats-daily-count').textContent=logs.filter(l=>l.type==='daily').length;
+  document.getElementById('stats-weekly-count').textContent=logs.filter(l=>l.type==='weekly').length;
+  document.getElementById('stats-monthly-count').textContent=logs.filter(l=>l.type==='monthly').length;
 
-  document.getElementById('stats-total').textContent = totalH.toFixed(1);
-  document.getElementById('stats-avg').textContent = avgH.toFixed(1);
-  document.getElementById('stats-days').textContent = uniqueDays;
-
-  // Weekly chart (last 7 weeks)
-  const barsEl = document.getElementById('weekly-bars');
-  const weeks = [];
-  const now = new Date();
-  for (let w = 6; w >= 0; w--) {
-    const wEnd = new Date(now);
-    wEnd.setDate(now.getDate() - now.getDay() - (w * 7) + 6);
-    const wStart = new Date(wEnd);
-    wStart.setDate(wEnd.getDate() - 6);
-    const wLogs = logs.filter(l => {
-      const ld = new Date(l.date + 'T00:00:00');
-      return ld >= wStart && ld <= wEnd;
-    });
-    const wH = wLogs.reduce((s, l) => s + (l.hours || 0), 0);
-    const label = `${wStart.getMonth() + 1}/${wStart.getDate()}`;
-    weeks.push({ label, hours: wH });
+  // Weekly chart
+  const barsEl=document.getElementById('weekly-bars');const weeks=[];const now=new Date();
+  for(let w=6;w>=0;w--){
+    const wE=new Date(now);wE.setDate(now.getDate()-now.getDay()-(w*7)+6);
+    const wS=new Date(wE);wS.setDate(wE.getDate()-6);
+    const wH=sl.filter(l=>{const ld=new Date(l.date+'T00:00:00');return ld>=wS&&ld<=wE;}).reduce((s,l)=>s+(l.hours||0),0);
+    weeks.push({label:`${wS.getMonth()+1}/${wS.getDate()}`,hours:wH});
   }
-
-  const maxH = Math.max(...weeks.map(w => w.hours), 31);
-  barsEl.innerHTML = weeks.map(w => `
-    <div class="chart-bar-wrapper">
-      <div class="chart-bar-value">${w.hours > 0 ? w.hours.toFixed(0) : ''}</div>
-      <div class="chart-bar" style="height:${maxH ? (w.hours / maxH * 100) : 0}%"></div>
-      <div class="chart-bar-label">${w.label}</div>
-    </div>
-  `).join('');
+  const maxH=Math.max(...weeks.map(w=>w.hours),31);
+  barsEl.innerHTML=weeks.map(w=>`<div class="chart-bar-wrapper"><div class="chart-bar-value">${w.hours>0?w.hours.toFixed(0):''}</div><div class="chart-bar" style="height:${maxH?(w.hours/maxH*100):0}%"></div><div class="chart-bar-label">${w.label}</div></div>`).join('');
 
   // Subject breakdown
-  const subjectMap = {};
-  logs.forEach(l => {
-    if (l.subject) {
-      subjectMap[l.subject] = (subjectMap[l.subject] || 0) + l.hours;
-    }
-  });
-  const subjects = Object.entries(subjectMap).sort((a, b) => b[1] - a[1]);
-  const subEl = document.getElementById('subject-breakdown');
-  if (subjects.length === 0) {
-    subEl.innerHTML = '<div style="color:var(--gray-500); font-size:0.85rem;">記録なし</div>';
-  } else {
-    const maxSH = subjects[0][1];
-    subEl.innerHTML = subjects.map(([name, h]) => `
-      <div style="margin-bottom:8px;">
-        <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:2px;">
-          <span>${name}</span><span style="font-weight:700;">${h.toFixed(1)}h</span>
-        </div>
-        <div style="background:var(--gray-200); height:6px; border-radius:3px;">
-          <div style="background:var(--primary); height:100%; border-radius:3px; width:${(h / maxSH * 100)}%;"></div>
-        </div>
-      </div>
-    `).join('');
-  }
+  const sm={};sl.forEach(l=>{if(l.subject)sm[l.subject]=(sm[l.subject]||0)+l.hours;});
+  const subs=Object.entries(sm).sort((a,b)=>b[1]-a[1]);
+  const subEl=document.getElementById('subject-breakdown');
+  if(!subs.length){subEl.innerHTML='<div style="color:var(--gray-500);font-size:0.85rem;">記録なし</div>';}
+  else{const mx=subs[0][1];subEl.innerHTML=subs.map(([n,h])=>`<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:2px;"><span>${n}</span><span style="font-weight:700;">${h.toFixed(1)}h</span></div><div style="background:var(--gray-200);height:6px;border-radius:3px;"><div style="background:var(--primary);height:100%;border-radius:3px;width:${h/mx*100}%;"></div></div></div>`).join('');}
 
-  // Pace check
-  const examDate = new Date(2026, 7, 23);
-  const startDate = new Date(2026, 2, 15);
-  const totalDays = (examDate - startDate) / (1000 * 60 * 60 * 24);
-  const elapsedDays = Math.max(1, (now - startDate) / (1000 * 60 * 60 * 24));
-  const targetTotal = 700; // target hours
-  const expectedByNow = (elapsedDays / totalDays) * targetTotal;
-  const paceEl = document.getElementById('pace-check');
-
-  const diff = totalH - expectedByNow;
-  const onTrack = diff >= 0;
-  paceEl.innerHTML = `
-    <div style="margin-bottom:8px;">
-      <strong>目標:</strong> 試験日までに ${targetTotal}h（残り期間の新規学習分）
-    </div>
-    <div style="margin-bottom:8px;">
-      <strong>現時点の理想ペース:</strong> ${expectedByNow.toFixed(0)}h
-    </div>
-    <div style="margin-bottom:8px;">
-      <strong>実績:</strong> ${totalH.toFixed(1)}h
-      <span style="color:${onTrack ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">
-        （${onTrack ? '+' : ''}${diff.toFixed(0)}h）
-      </span>
-    </div>
-    <div style="padding:10px; border-radius:8px; background:${onTrack ? 'var(--success-light)' : 'var(--danger-light)'}; font-weight:600; font-size:0.85rem;">
-      ${onTrack
-        ? 'ペース通り。この調子を維持してください。'
-        : `遅れが出ています。週あたり ${(Math.abs(diff) / ((examDate - now) / (1000*60*60*24*7))).toFixed(1)}h の上乗せが必要です。`}
-    </div>
-  `;
+  // Pace
+  const examDate=new Date(2026,7,23),startDate=new Date(2026,2,15);
+  const totalDays=(examDate-startDate)/864e5,elapsed=Math.max(1,(now-startDate)/864e5),target=700;
+  const expected=(elapsed/totalDays)*target,diff=totalH-expected,ok=diff>=0;
+  document.getElementById('pace-check').innerHTML=`
+    <div style="margin-bottom:8px;"><strong>目標:</strong> ${target}h</div>
+    <div style="margin-bottom:8px;"><strong>理想ペース:</strong> ${expected.toFixed(0)}h</div>
+    <div style="margin-bottom:8px;"><strong>実績:</strong> ${totalH.toFixed(1)}h <span style="color:${ok?'var(--success)':'var(--danger)'};font-weight:700;">(${ok?'+':''}${diff.toFixed(0)}h)</span></div>
+    <div style="padding:10px;border-radius:8px;background:${ok?'var(--success-light)':'var(--danger-light)'};font-weight:600;font-size:0.85rem;">
+      ${ok?'ペース通り。この調子で。':`遅れあり。週${(Math.abs(diff)/((examDate-now)/864e5/7)).toFixed(1)}hの上乗せが必要。`}</div>`;
 }
 
-// ===== INIT =====
+// Init
 function init() {
-  updateCountdown();
-  setInterval(updateCountdown, 60000);
-
-  // Set today's date as default
-  const today = new Date().toISOString().slice(0, 10);
-  document.getElementById('log-date').value = today;
-
-  initCheckboxes();
-  updateDashboard();
-  renderLogs();
+  updateCountdown(); setInterval(updateCountdown,60000);
+  const today=new Date().toISOString().slice(0,10);
+  document.getElementById('log-date').value=today;
+  document.getElementById('daily-date').value=today;
+  // Set weekly date to last Monday
+  const now=new Date(),mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+  document.getElementById('weekly-date').value=mon.toISOString().slice(0,10);
+  initCheckboxes(); updateDashboard(); renderLogs();
 }
-
 init();
 </script>
 </body>
