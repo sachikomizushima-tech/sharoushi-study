@@ -298,6 +298,7 @@ body {
   <div class="tab" data-tab="record">記録</div>
   <div class="tab" data-tab="history">履歴</div>
   <div class="tab" data-tab="stats">統計</div>
+  <div class="tab" data-tab="settings">設定</div>
 </div>
 
 <div class="container">
@@ -672,14 +673,141 @@ body {
   <div class="card"><h3>目標ペース判定</h3><div id="pace-check" style="margin-top:8px; font-size:0.85rem;"></div></div>
 </div>
 
+<!-- ==================== SETTINGS ==================== -->
+<div class="section" id="sec-settings">
+  <div class="card">
+    <h3>Google Spreadsheet 連携</h3>
+    <div style="font-size:0.8rem; color:var(--gray-500); margin-bottom:12px;">
+      記録をGoogleスプレッドシートに自動保存します。<br>
+      GASのウェブアプリURLを設定してください。
+    </div>
+    <div class="form-group">
+      <label>GAS ウェブアプリ URL</label>
+      <input type="url" id="gas-url" placeholder="https://script.google.com/macros/s/xxxxx/exec">
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-primary" onclick="saveGasUrl()">保存</button>
+      <button class="btn" style="background:var(--gray-200);color:var(--gray-700);" onclick="testGasConnection()">接続テスト</button>
+    </div>
+    <div id="gas-status" style="margin-top:8px; font-size:0.8rem;"></div>
+  </div>
+
+  <div class="card">
+    <h3>データ管理</h3>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <button class="btn" style="background:var(--teal);color:white;" onclick="exportJson()">JSONエクスポート（バックアップ）</button>
+      <button class="btn" style="background:var(--gray-200);color:var(--gray-700);" onclick="document.getElementById('import-file').click();">JSONインポート（復元）</button>
+      <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importJson(event)">
+      <button class="btn" style="background:var(--purple);color:white;" onclick="syncAllToSheet()">全記録をスプレッドシートに再送信</button>
+    </div>
+    <div id="data-status" style="margin-top:8px; font-size:0.8rem;"></div>
+  </div>
+
+  <div class="card">
+    <h3>セットアップ手順</h3>
+    <div style="font-size:0.8rem; color:var(--gray-700); line-height:1.8;">
+      <strong>1.</strong> Google Drive で新しいスプレッドシートを作成<br>
+      <strong>2.</strong> URLの /d/ と /edit の間のIDをコピー<br>
+      <strong>3.</strong> <a href="https://script.google.com" target="_blank" style="color:var(--primary);">script.google.com</a> で新しいプロジェクト作成<br>
+      <strong>4.</strong> spreadsheet_logger.gs のコードを貼り付け<br>
+      <strong>5.</strong> SPREADSHEET_ID にスプレッドシートIDを設定<br>
+      <strong>6.</strong> setupSheets() を実行（シート自動作成）<br>
+      <strong>7.</strong> デプロイ → ウェブアプリ → アクセス:全員 → デプロイ<br>
+      <strong>8.</strong> 表示されたURLを上の欄に貼り付けて保存
+    </div>
+  </div>
+</div>
+
 </div>
 
 <script>
-const STORAGE_KEYS = { checks: 'sr26_checks', logs: 'sr26_logs' };
+const STORAGE_KEYS = { checks: 'sr26_checks', logs: 'sr26_logs', gasUrl: 'sr26_gas_url' };
 function loadChecks() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.checks) || '{}'); } catch { return {}; } }
 function saveChecks(d) { localStorage.setItem(STORAGE_KEYS.checks, JSON.stringify(d)); }
 function loadLogs() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.logs) || '[]'); } catch { return []; } }
 function saveLogs(d) { localStorage.setItem(STORAGE_KEYS.logs, JSON.stringify(d)); }
+function getGasUrl() { return localStorage.getItem(STORAGE_KEYS.gasUrl) || ''; }
+function setGasUrl(url) { localStorage.setItem(STORAGE_KEYS.gasUrl, url); }
+
+// === Spreadsheet送信 ===
+function sendToSheet(data) {
+  const url = getGasUrl();
+  if (!url) return;
+  fetch(url, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(data)
+  }).catch(err => console.warn('Sheet送信エラー:', err));
+}
+
+// === 設定画面 ===
+function saveGasUrl() {
+  const url = document.getElementById('gas-url').value.trim();
+  setGasUrl(url);
+  const st = document.getElementById('gas-status');
+  st.innerHTML = url
+    ? '<span style="color:var(--success);">URL を保存しました。接続テストを実行してください。</span>'
+    : '<span style="color:var(--warning);">URLが空です。スプレッドシート連携は無効です。</span>';
+}
+
+function testGasConnection() {
+  const url = getGasUrl();
+  const st = document.getElementById('gas-status');
+  if (!url) { st.innerHTML = '<span style="color:var(--danger);">URLが設定されていません</span>'; return; }
+  st.innerHTML = '<span style="color:var(--gray-500);">接続中...</span>';
+  fetch(url, { mode: 'no-cors' })
+    .then(() => { st.innerHTML = '<span style="color:var(--success);">接続OK（リクエスト送信成功）</span>'; })
+    .catch(err => { st.innerHTML = '<span style="color:var(--danger);">接続エラー: ' + err.message + '</span>'; });
+}
+
+function exportJson() {
+  const data = { checks: loadChecks(), logs: loadLogs(), exportDate: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sharoushi_backup_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  document.getElementById('data-status').innerHTML = '<span style="color:var(--success);">エクスポート完了</span>';
+}
+
+function importJson(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.checks) saveChecks(data.checks);
+      if (data.logs) saveLogs(data.logs);
+      initCheckboxes(); updateDashboard(); renderLogs();
+      document.getElementById('data-status').innerHTML = '<span style="color:var(--success);">インポート完了（記録 ' + (data.logs?.length || 0) + '件）</span>';
+    } catch (err) {
+      document.getElementById('data-status').innerHTML = '<span style="color:var(--danger);">ファイル読み込みエラー</span>';
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function syncAllToSheet() {
+  const url = getGasUrl();
+  const st = document.getElementById('data-status');
+  if (!url) { st.innerHTML = '<span style="color:var(--danger);">GAS URLが未設定です</span>'; return; }
+  const logs = loadLogs();
+  if (!logs.length) { st.innerHTML = '<span style="color:var(--warning);">記録がありません</span>'; return; }
+  st.innerHTML = '<span style="color:var(--gray-500);">送信中... 0/' + logs.length + '</span>';
+  let sent = 0;
+  const sendNext = (i) => {
+    if (i >= logs.length) {
+      st.innerHTML = '<span style="color:var(--success);">全 ' + logs.length + ' 件の送信完了</span>';
+      return;
+    }
+    fetch(url, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(logs[i]) })
+      .then(() => { sent++; st.innerHTML = '<span style="color:var(--gray-500);">送信中... ' + sent + '/' + logs.length + '</span>'; setTimeout(() => sendNext(i + 1), 300); })
+      .catch(() => { setTimeout(() => sendNext(i + 1), 300); });
+  };
+  sendNext(0);
+}
 
 // Countdown
 function updateCountdown() {
@@ -764,8 +892,10 @@ function addStudyLog() {
   const subject=document.getElementById('log-subject').value, memo=document.getElementById('log-memo').value;
   if(!date||!hours){alert('日付と学習時間は必須です');return;}
   const logs=loadLogs();
-  logs.push({id:Date.now(),type:'study',date,hours:parseFloat(hours),subject,memo});
+  const entry = {id:Date.now(),type:'study',date,hours:parseFloat(hours),subject,memo};
+  logs.push(entry);
   logs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id); saveLogs(logs);
+  sendToSheet(entry);
   document.getElementById('log-hours').value=''; document.getElementById('log-subject').value=''; document.getElementById('log-memo').value='';
   updateDashboard(); alert('勉強記録を保存しました');
 }
@@ -776,12 +906,14 @@ function addDailyLog() {
   if(!date||!scene){alert('日付と場面は必須です');return;}
   const score=document.querySelector('input[name="daily-score"]:checked');
   const logs=loadLogs();
-  logs.push({id:Date.now(),type:'daily',date,
+  const entry = {id:Date.now(),type:'daily',date,
     scene, labor:document.getElementById('daily-labor').value,
     ai:document.getElementById('daily-ai').value, consul:document.getElementById('daily-consul').value,
     memo:document.getElementById('daily-memo').value, score:score?score.value:''
-  });
+  };
+  logs.push(entry);
   logs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id); saveLogs(logs);
+  sendToSheet(entry);
   ['daily-scene','daily-labor','daily-ai','daily-consul','daily-memo'].forEach(id=>document.getElementById(id).value='');
   document.querySelectorAll('input[name="daily-score"]').forEach(r=>r.checked=false);
   updateDashboard(); alert('1日1記録を保存しました');
@@ -792,12 +924,14 @@ function addWeeklyLog() {
   const quote=document.getElementById('weekly-quote').value;
   if(!date||!quote){alert('日付と発言は必須です');return;}
   const logs=loadLogs();
-  logs.push({id:Date.now(),type:'weekly',date,
+  const entry = {id:Date.now(),type:'weekly',date,
     quote, who:document.getElementById('weekly-who').value,
     labor:document.getElementById('weekly-labor').value, biz:document.getElementById('weekly-biz').value,
     ai:document.getElementById('weekly-ai').value, learning:document.getElementById('weekly-learning').value
-  });
+  };
+  logs.push(entry);
   logs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id); saveLogs(logs);
+  sendToSheet(entry);
   ['weekly-quote','weekly-who','weekly-labor','weekly-biz','weekly-ai','weekly-learning'].forEach(id=>document.getElementById(id).value='');
   updateDashboard(); alert('週次翻訳を保存しました');
 }
@@ -808,14 +942,16 @@ function addMonthlyLog() {
   if(!month||!voice){alert('対象年月と経営者の声は必須です');return;}
   const score=document.querySelector('input[name="monthly-score"]:checked');
   const logs=loadLogs();
-  logs.push({id:Date.now(),type:'monthly',date:new Date().toISOString().slice(0,10),
+  const entry = {id:Date.now(),type:'monthly',date:new Date().toISOString().slice(0,10),
     month, company:document.getElementById('monthly-company').value,
     voice, issue:document.getElementById('monthly-issue').value,
     labor:document.getElementById('monthly-labor').value, ai:document.getElementById('monthly-ai').value,
     biz:document.getElementById('monthly-biz').value, kpi:document.getElementById('monthly-kpi').value,
     reflection:document.getElementById('monthly-reflection').value, score:score?score.value:''
-  });
+  };
+  logs.push(entry);
   logs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id); saveLogs(logs);
+  sendToSheet(entry);
   ['monthly-month','monthly-company','monthly-voice','monthly-issue','monthly-labor','monthly-ai','monthly-biz','monthly-kpi','monthly-reflection'].forEach(id=>document.getElementById(id).value='');
   document.querySelectorAll('input[name="monthly-score"]').forEach(r=>r.checked=false);
   updateDashboard(); alert('月次提案を保存しました');
@@ -940,6 +1076,9 @@ function init() {
   const now=new Date(),mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
   document.getElementById('weekly-date').value=mon.toISOString().slice(0,10);
   initCheckboxes(); updateDashboard(); renderLogs();
+  // 設定画面のURL復元
+  const savedUrl = getGasUrl();
+  if (savedUrl) document.getElementById('gas-url').value = savedUrl;
 }
 init();
 </script>
